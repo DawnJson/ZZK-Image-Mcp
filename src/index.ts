@@ -215,7 +215,7 @@ async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T, index: nu
   return results;
 }
 
-const server = new McpServer({ name: "pro-image-mcp", version: VERSION });
+const server = new McpServer({ name: "zzk-image-mcp", version: VERSION });
 
 server.registerTool(
   "image_generate",
@@ -569,7 +569,7 @@ server.registerTool(
     const [billing, usedUsd] = await Promise.all([client.billing(), client.usageUsd()]);
     const quota = billing?.hard_limit_usd;
     const lines = [
-      `pro-image-mcp ${VERSION}`,
+      `zzk-image-mcp ${VERSION}`,
       "",
       "Configuration",
       `  base_url:      ${cfg.baseUrl}`,
@@ -616,4 +616,4 @@ server.registerTool(
 const transport = new StdioServerTransport();
 await server.connect(transport);
 // stdout is the MCP channel; diagnostics must go to stderr.
-console.error(`pro-image-mcp ready - ${cfg.baseUrl}, saving to ${cfg.saveDir}`);
+console.error(`zzk-image-mcp ready - ${cfg.baseUrl}, saving to ${cfg.saveDir}`);

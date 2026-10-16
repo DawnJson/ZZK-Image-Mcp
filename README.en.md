@@ -1,9 +1,9 @@
-# pro-image-mcp
+# zzk-image-mcp
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node: >=18](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](package.json)
 [![MCP: stdio](https://img.shields.io/badge/MCP-stdio-orange.svg)](https://modelcontextprotocol.io)
-[![npm](https://img.shields.io/npm/v/pro-image-mcp.svg)](https://www.npmjs.com/package/pro-image-mcp)
+[![npm](https://img.shields.io/npm/v/zzk-image-mcp.svg)](https://www.npmjs.com/package/zzk-image-mcp)
 
 Model Context Protocol (MCP) stdio server wrapping OpenAI-compatible image relay stations (New API / one-api family) into structured image generation and editing tools.
 
@@ -13,7 +13,7 @@ Model Context Protocol (MCP) stdio server wrapping OpenAI-compatible image relay
 
 ## What It Is
 
-`pro-image-mcp` connects AI coding assistants (Claude Code, Cursor, Codex) to OpenAI-compatible image relay endpoints over stdio. It guarantees:
+`zzk-image-mcp` connects AI coding assistants (Claude Code, Cursor, Codex) to OpenAI-compatible image relay endpoints over stdio. It guarantees:
 - **Explicit quality and size**: Required on all billed tools to prevent silent tier jumps. When unstated, tool descriptions instruct the client model to pick (cheapest tier, implied aspect ratio) rather than interrogate the user.
 - **Measured costs**: Spend is calculated from `/v1/dashboard/billing/usage` deltas after each call, never guessed. List prices from `list_models` are for comparison only.
 - **Paths, not bytes**: Downloaded images are saved to disk; only local absolute paths return to context so image bytes never pollute LLM windows.
@@ -34,30 +34,30 @@ Model Context Protocol (MCP) stdio server wrapping OpenAI-compatible image relay
 ## Quickstart
 
 ```bash
-npx -y pro-image-mcp             # run straight from npm
-npm install -g pro-image-mcp     # or install globally
+npx -y zzk-image-mcp             # run straight from npm
+npm install -g zzk-image-mcp     # or install globally
 ```
 
-To pin an exact version, query `npm view pro-image-mcp version` and specify `pro-image-mcp@<version>`.
+To pin an exact version, query `npm view zzk-image-mcp version` and specify `zzk-image-mcp@<version>`.
 
 ```json
 {
   "mcpServers": {
-    "pro-image": {
+    "zzk-image": {
       "command": "npx",
-      "args": ["-y", "pro-image-mcp"],
+      "args": ["-y", "zzk-image-mcp"],
       "env": {
-        "PROIMAGE_API_KEY": "sk-[REDACTED]",
-        "PROIMAGE_BASE_URL": "https://newapi.prorisehub.com",
-        "PROIMAGE_SAVE_DIR": "/path/to/output/images",
-        "PROIMAGE_DEFAULT_MODEL": "gpt-image-2"
+        "ZZKIMAGE_API_KEY": "sk-[REDACTED]",
+        "ZZKIMAGE_BASE_URL": "https://api.zaizaiking.com",
+        "ZZKIMAGE_SAVE_DIR": "/path/to/output/images",
+        "ZZKIMAGE_DEFAULT_MODEL": "gpt-image-2"
       }
     }
   }
 }
 ```
 
-On Windows, clients that spawn argv directly without a shell (e.g. Codex) fail with `ENOENT` for bare `pro-image-mcp` or `npx`. Use `"command": "node"` with the absolute `dist/index.js` path (`npm root -g` prints the prefix), or `"command": "cmd", "args": ["/c", "pro-image-mcp"]`.
+On Windows, clients that spawn argv directly without a shell (e.g. Codex) fail with `ENOENT` for bare `zzk-image-mcp` or `npx`. Use `"command": "node"` with the absolute `dist/index.js` path (`npm root -g` prints the prefix), or `"command": "cmd", "args": ["/c", "zzk-image-mcp"]`.
 
 Example prompt:
 > *"Generate a minimalist red maple leaf on a clean white background using gpt-image-2 with high quality and 1024x1024 size."*
@@ -66,15 +66,15 @@ Example prompt:
 
 | Variable | Default | Description |
 |---|---|---|
-| `PROIMAGE_API_KEY` | *(none)* | **Required**. Relay API key. Missing key exits immediately. |
-| `PROIMAGE_BASE_URL` | `https://newapi.prorisehub.com` | Relay base URL. Must be `https` (`http` only for localhost). |
-| `PROIMAGE_SAVE_DIR` | `~/Pictures/pro-image-mcp` | Directory where downloaded images are saved. |
-| `PROIMAGE_DEFAULT_MODEL` | `gpt-image-2` | Fallback model when `model` argument is omitted. |
-| `PROIMAGE_TIMEOUT_MS` | `300000` | Single HTTP request timeout in ms (5 minutes). |
-| `PROIMAGE_CONCURRENCY` | `3` | Default concurrency limit for `image_batch_generate`. |
-| `PROIMAGE_SAVE_DIR_ROOT` | Effective save dir | Output sandbox root; every `save_dir` must resolve inside it. |
-| `PROIMAGE_INPUT_ROOT` | *(unset)* | Optional input sandbox root for reference images. |
-| `PROIMAGE_TRUSTED_DOWNLOAD_HOSTS` | Derived from base URL | Allowed download hosts (defaults to base domain and subdomains). |
+| `ZZKIMAGE_API_KEY` | *(none)* | **Required**. Relay API key. Missing key exits immediately. |
+| `ZZKIMAGE_BASE_URL` | `https://api.zaizaiking.com` | Relay base URL. Must be `https` (`http` only for localhost). |
+| `ZZKIMAGE_SAVE_DIR` | `~/Pictures/zzk-image-mcp` | Directory where downloaded images are saved. |
+| `ZZKIMAGE_DEFAULT_MODEL` | `gpt-image-2` | Fallback model when `model` argument is omitted. |
+| `ZZKIMAGE_TIMEOUT_MS` | `300000` | Single HTTP request timeout in ms (5 minutes). |
+| `ZZKIMAGE_CONCURRENCY` | `3` | Default concurrency limit for `image_batch_generate`. |
+| `ZZKIMAGE_SAVE_DIR_ROOT` | Effective save dir | Output sandbox root; every `save_dir` must resolve inside it. |
+| `ZZKIMAGE_INPUT_ROOT` | *(unset)* | Optional input sandbox root for reference images. |
+| `ZZKIMAGE_TRUSTED_DOWNLOAD_HOSTS` | Derived from base URL | Allowed download hosts (defaults to base domain and subdomains). |
 
 ## What You Get Back
 
@@ -95,7 +95,7 @@ The default model is `gpt-image-2`. Use `list_models` to view available models, 
 
 ## Troubleshooting
 
-- **Missing API key**: If `PROIMAGE_API_KEY` is not set in the client `env` block, the server exits immediately with an explanatory error.
+- **Missing API key**: If `ZZKIMAGE_API_KEY` is not set in the client `env` block, the server exits immediately with an explanatory error.
 - **401 Unauthorized**: Verify that the API key is active, valid, and authorized for the target relay.
 - **Client timeout**: Generation takes 15–60s with 5s progress heartbeats; raise client timeout if needed (e.g. `MCP_TIMEOUT=300000` for Claude Code).
 - **Rejected size or ratio**: Model rejected the requested aspect ratio; check the error message for supported ratios or use `auto`.
@@ -103,10 +103,10 @@ The default model is `gpt-image-2`. Use `list_models` to view available models, 
 
 ## Safety and Limits
 
-- **HTTPS transport**: `PROIMAGE_BASE_URL` and image downloads enforce `https` (`http` only for localhost) to protect bearer tokens.
-- **Output sandbox**: `save_dir` is confined to `PROIMAGE_SAVE_DIR_ROOT` (symlinks resolved); escapes are rejected locally before billed calls.
+- **HTTPS transport**: `ZZKIMAGE_BASE_URL` and image downloads enforce `https` (`http` only for localhost) to protect bearer tokens.
+- **Output sandbox**: `save_dir` is confined to `ZZKIMAGE_SAVE_DIR_ROOT` (symlinks resolved); escapes are rejected locally before billed calls.
 - **Input validation**: Reference images are verified via magic bytes (PNG, JPEG, WebP, GIF) and capped at 25 MB before upload.
-- **Download allowlist**: Image download URLs are restricted to `PROIMAGE_TRUSTED_DOWNLOAD_HOSTS` to prevent SSRF.
+- **Download allowlist**: Image download URLs are restricted to `ZZKIMAGE_TRUSTED_DOWNLOAD_HOSTS` to prevent SSRF.
 
 ## Development
 
@@ -122,8 +122,8 @@ Run `node e2e.mjs valid` or `info,models` for free local validation; `gen`, `edi
 
 ## Disclaimer
 
-`pro-image-mcp` is an independent open-source tool not affiliated with or endorsed by any relay operator. Model availability, pricing, and observed capabilities reflect empirical snapshots that may vary across accounts, tiers, and channel groups.
+`zzk-image-mcp` is an independent open-source tool not affiliated with or endorsed by any relay operator. Model availability, pricing, and observed capabilities reflect empirical snapshots that may vary across accounts, tiers, and channel groups.
 
 ## License
 
-Distributed under the [MIT License](LICENSE). Bug reports and feature suggestions can be submitted via [GitHub Issues](https://github.com/DawnJson/Pro-Image-Mcp/issues).
+Distributed under the [MIT License](LICENSE). Bug reports and feature suggestions can be submitted via [GitHub Issues](https://github.com/DawnJson/ZZK-Image-MCP/issues).

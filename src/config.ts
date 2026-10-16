@@ -12,8 +12,8 @@ export interface Config {
   inputRoot?: string;
   /**
    * Hosts the server is willing to download returned images from. An entry
-   * matches the host itself and anything under it, so `prorisehub.com` covers
-   * `cdn.prorisehub.com`.
+   * matches the host itself and anything under it, so `zaizaiking.com` covers
+   * `cdn.zaizaiking.com`.
    */
   trustedDownloadHosts: string[];
   defaultModel: string;
@@ -38,13 +38,13 @@ function assertTransportSecurity(baseUrl: string): void {
   try {
     url = new URL(baseUrl);
   } catch {
-    throw new Error(`PROIMAGE_BASE_URL is not a valid URL: ${baseUrl}`);
+    throw new Error(`ZZKIMAGE_BASE_URL is not a valid URL: ${baseUrl}`);
   }
   if (url.protocol === "https:") return;
   const loopback = url.hostname === "localhost" || url.hostname === "127.0.0.1" || url.hostname === "[::1]";
   if (url.protocol === "http:" && loopback) return;
   throw new Error(
-    `PROIMAGE_BASE_URL must use https - http is accepted only for localhost. Got: ${baseUrl}. ` +
+    `ZZKIMAGE_BASE_URL must use https - http is accepted only for localhost. Got: ${baseUrl}. ` +
       `The API key is sent as a bearer token on every request and would travel in plaintext.`,
   );
 }
@@ -81,30 +81,30 @@ function envDir(name: string): string | undefined {
 }
 
 export function loadConfig(): Config {
-  const apiKey = process.env.PROIMAGE_API_KEY?.trim() ?? "";
+  const apiKey = process.env.ZZKIMAGE_API_KEY?.trim() ?? "";
   if (!apiKey) {
     throw new Error(
-      "PROIMAGE_API_KEY is not set. Add it to your MCP server config env block.",
+      "ZZKIMAGE_API_KEY is not set. Add it to your MCP server config env block.",
     );
   }
   // Trailing slashes break path joining against the /v1 prefix.
-  const baseUrl = (process.env.PROIMAGE_BASE_URL?.trim() || "https://newapi.prorisehub.com").replace(/\/+$/, "");
+  const baseUrl = (process.env.ZZKIMAGE_BASE_URL?.trim() || "https://api.zaizaiking.com").replace(/\/+$/, "");
   assertTransportSecurity(baseUrl);
 
-  const saveDir = envDir("PROIMAGE_SAVE_DIR") ?? join(homedir(), "Pictures", "pro-image-mcp");
+  const saveDir = envDir("ZZKIMAGE_SAVE_DIR") ?? join(homedir(), "Pictures", "zzk-image-mcp");
   // Confining writes to the save dir itself is the useful default: a save_dir
   // argument comes from the model, not the user.
-  const saveRoot = envDir("PROIMAGE_SAVE_DIR_ROOT") ?? saveDir;
+  const saveRoot = envDir("ZZKIMAGE_SAVE_DIR_ROOT") ?? saveDir;
   if (!isInside(saveRoot, saveDir)) {
     throw new Error(
-      `PROIMAGE_SAVE_DIR (${saveDir}) is outside PROIMAGE_SAVE_DIR_ROOT (${saveRoot}), ` +
+      `ZZKIMAGE_SAVE_DIR (${saveDir}) is outside ZZKIMAGE_SAVE_DIR_ROOT (${saveRoot}), ` +
         `so nothing could ever be saved. Widen the root or move the save dir.`,
     );
   }
 
-  const inputRoot = envDir("PROIMAGE_INPUT_ROOT");
+  const inputRoot = envDir("ZZKIMAGE_INPUT_ROOT");
   if (inputRoot && !isAbsolute(inputRoot)) {
-    throw new Error(`PROIMAGE_INPUT_ROOT must be an absolute path. Got: ${inputRoot}`);
+    throw new Error(`ZZKIMAGE_INPUT_ROOT must be an absolute path. Got: ${inputRoot}`);
   }
 
   return {
@@ -113,9 +113,9 @@ export function loadConfig(): Config {
     saveDir,
     saveRoot,
     inputRoot,
-    trustedDownloadHosts: envHosts("PROIMAGE_TRUSTED_DOWNLOAD_HOSTS", defaultDownloadHosts(baseUrl)),
-    defaultModel: process.env.PROIMAGE_DEFAULT_MODEL?.trim() || "gpt-image-2",
-    timeoutMs: envInt("PROIMAGE_TIMEOUT_MS", 300_000),
-    maxConcurrency: envInt("PROIMAGE_CONCURRENCY", 3),
+    trustedDownloadHosts: envHosts("ZZKIMAGE_TRUSTED_DOWNLOAD_HOSTS", defaultDownloadHosts(baseUrl)),
+    defaultModel: process.env.ZZKIMAGE_DEFAULT_MODEL?.trim() || "gpt-image-2",
+    timeoutMs: envInt("ZZKIMAGE_TIMEOUT_MS", 300_000),
+    maxConcurrency: envInt("ZZKIMAGE_CONCURRENCY", 3),
   };
 }

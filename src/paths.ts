@@ -46,7 +46,7 @@ export function resolveSaveDir(cfg: Config, override?: string): string {
   if (!isInside(cfg.saveRoot, dir)) {
     throw new Error(
       `save_dir must stay inside ${cfg.saveRoot}: ${dir} is outside it. ` +
-        `Set PROIMAGE_SAVE_DIR_ROOT to widen the sandbox.`,
+        `Set ZZKIMAGE_SAVE_DIR_ROOT to widen the sandbox.`,
     );
   }
   return dir;
@@ -86,8 +86,8 @@ export async function checkImageInputs(paths: string[], cfg: Config): Promise<st
 
     if (cfg.inputRoot && !isInside(cfg.inputRoot, real)) {
       return (
-        `Reference image outside PROIMAGE_INPUT_ROOT (${cfg.inputRoot}): ${real}. ` +
-        `Move the file inside that root, or widen PROIMAGE_INPUT_ROOT.`
+        `Reference image outside ZZKIMAGE_INPUT_ROOT (${cfg.inputRoot}): ${real}. ` +
+        `Move the file inside that root, or widen ZZKIMAGE_INPUT_ROOT.`
       );
     }
 
@@ -137,7 +137,7 @@ export function assertDownloadable(rawUrl: string, cfg: Config): string {
     throw new Error(
       `Refusing to download the image from an untrusted host: ${host}. ` +
         `Trusted hosts are ${cfg.trustedDownloadHosts.join(", ")}. ` +
-        `Add it to PROIMAGE_TRUSTED_DOWNLOAD_HOSTS if that host is expected.`,
+        `Add it to ZZKIMAGE_TRUSTED_DOWNLOAD_HOSTS if that host is expected.`,
     );
   }
   return trimmed;

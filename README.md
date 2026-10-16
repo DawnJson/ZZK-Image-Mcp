@@ -1,9 +1,9 @@
-# pro-image-mcp
+# zzk-image-mcp
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node: >=18](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](package.json)
 [![MCP: stdio](https://img.shields.io/badge/MCP-stdio-orange.svg)](https://modelcontextprotocol.io)
-[![npm](https://img.shields.io/npm/v/pro-image-mcp.svg)](https://www.npmjs.com/package/pro-image-mcp)
+[![npm](https://img.shields.io/npm/v/zzk-image-mcp.svg)](https://www.npmjs.com/package/zzk-image-mcp)
 
 一个基于 Model Context Protocol (MCP) 的 stdio 服务器，将 OpenAI 兼容的图像中转站（New API / one-api 体系）封装为标准化的图像生成与编辑工具。
 
@@ -13,7 +13,7 @@
 
 ## 这是什么
 
-`pro-image-mcp` 是一个 MCP stdio 服务端，将 OpenAI 兼容的图像中转站接口封装为供 Claude Code、Cursor、Codex 等 AI 编程助手调用的图像工具。核心保证：
+`zzk-image-mcp` 是一个 MCP stdio 服务端，将 OpenAI 兼容的图像中转站接口封装为供 Claude Code、Cursor、Codex 等 AI 编程助手调用的图像工具。核心保证：
 - **计费参数显式声明**：`quality` 与 `size` 均为必填项，未指定时由客户端模型按最低成本或提示词意图自动选择，不设静默默认值。
 - **真实测算调用成本**：每次计费调用前后读取账单接口差值，报告实测扣费而非预估标价。
 - **本地落盘返回路径**：图片存入本地磁盘并仅返回绝对路径，图片字节不挤占 LLM 上下文。
@@ -34,27 +34,27 @@
 ## 快速开始
 
 ```bash
-npm install -g pro-image-mcp     # 全局安装；或用 npx -y pro-image-mcp
+npm install -g zzk-image-mcp     # 全局安装；或用 npx -y zzk-image-mcp
 ```
-锁定版本可写 `pro-image-mcp@<version>`，版本号用 `npm view pro-image-mcp version` 查询。在客户端配置（如 Claude Code 的 `.mcp.json`、Cursor 的 `mcp.json`）中添加：
+锁定版本可写 `zzk-image-mcp@<version>`，版本号用 `npm view zzk-image-mcp version` 查询。在客户端配置（如 Claude Code 的 `.mcp.json`、Cursor 的 `mcp.json`）中添加：
 
 ```json
 {
   "mcpServers": {
-    "pro-image": {
+    "zzk-image": {
       "command": "npx",
-      "args": ["-y", "pro-image-mcp"],
+      "args": ["-y", "zzk-image-mcp"],
       "env": {
-        "PROIMAGE_API_KEY": "sk-[REDACTED]",
-        "PROIMAGE_BASE_URL": "https://newapi.prorisehub.com",
-        "PROIMAGE_SAVE_DIR": "/path/to/output/images",
-        "PROIMAGE_DEFAULT_MODEL": "gpt-image-2"
+        "ZZKIMAGE_API_KEY": "sk-[REDACTED]",
+        "ZZKIMAGE_BASE_URL": "https://api.zaizaiking.com",
+        "ZZKIMAGE_SAVE_DIR": "/path/to/output/images",
+        "ZZKIMAGE_DEFAULT_MODEL": "gpt-image-2"
       }
     }
   }
 }
 ```
-Windows 下直接 spawn 进程的客户端（如 Codex）对裸 `pro-image-mcp` 或 `npx` 会报 `ENOENT`，请改用 `"command": "node"` 搭配 `dist/index.js` 绝对路径（通过 `npm root -g` 查询前缀），或用 `"command": "cmd"` 搭配 `"args": ["/c", "pro-image-mcp"]`。路径推荐使用正斜杠。
+Windows 下直接 spawn 进程的客户端（如 Codex）对裸 `zzk-image-mcp` 或 `npx` 会报 `ENOENT`，请改用 `"command": "node"` 搭配 `dist/index.js` 绝对路径（通过 `npm root -g` 查询前缀），或用 `"command": "cmd"` 搭配 `"args": ["/c", "zzk-image-mcp"]`。路径推荐使用正斜杠。
 
 调用示例：向 AI 助手发送 *"使用 gpt-image-2 生成一张 1024x1024、quality 为 low 的白底极简红枫叶图标"*。
 
@@ -62,15 +62,15 @@ Windows 下直接 spawn 进程的客户端（如 Codex）对裸 `pro-image-mcp` 
 
 | 变量名 | 默认值 | 说明 |
 |---|---|---|
-| `PROIMAGE_API_KEY` | *(无)* | **必填**。中转站 API Key，未设置则服务报错退出。 |
-| `PROIMAGE_BASE_URL` | `https://newapi.prorisehub.com` | 中转站接口地址。仅支持 `https`（`localhost`/`127.0.0.1` 允许 `http`）。 |
-| `PROIMAGE_SAVE_DIR` | `~/Pictures/pro-image-mcp` | 图片本地保存目录。 |
-| `PROIMAGE_DEFAULT_MODEL` | `gpt-image-2` | 省略 `model` 参数时的默认模型。 |
-| `PROIMAGE_TIMEOUT_MS` | `300000` | HTTP 请求超时毫秒数（默认 5 分钟）。 |
-| `PROIMAGE_CONCURRENCY` | `3` | `image_batch_generate` 的默认并发数。 |
-| `PROIMAGE_SAVE_DIR_ROOT` | `PROIMAGE_SAVE_DIR` | 输出沙箱根目录，`save_dir` 必须解析在此根目录以内。 |
-| `PROIMAGE_INPUT_ROOT` | *(未设置)* | 可选输入沙箱根目录，设置后参考图路径必须在此根目录以内。 |
-| `PROIMAGE_TRUSTED_DOWNLOAD_HOSTS` | 由基础地址推导 | 允许下载图片的受信任域名（逗号分隔），默认包含接口主机名及父域名子域。 |
+| `ZZKIMAGE_API_KEY` | *(无)* | **必填**。中转站 API Key，未设置则服务报错退出。 |
+| `ZZKIMAGE_BASE_URL` | `https://api.zaizaiking.com` | 中转站接口地址。仅支持 `https`（`localhost`/`127.0.0.1` 允许 `http`）。 |
+| `ZZKIMAGE_SAVE_DIR` | `~/Pictures/zzk-image-mcp` | 图片本地保存目录。 |
+| `ZZKIMAGE_DEFAULT_MODEL` | `gpt-image-2` | 省略 `model` 参数时的默认模型。 |
+| `ZZKIMAGE_TIMEOUT_MS` | `300000` | HTTP 请求超时毫秒数（默认 5 分钟）。 |
+| `ZZKIMAGE_CONCURRENCY` | `3` | `image_batch_generate` 的默认并发数。 |
+| `ZZKIMAGE_SAVE_DIR_ROOT` | `ZZKIMAGE_SAVE_DIR` | 输出沙箱根目录，`save_dir` 必须解析在此根目录以内。 |
+| `ZZKIMAGE_INPUT_ROOT` | *(未设置)* | 可选输入沙箱根目录，设置后参考图路径必须在此根目录以内。 |
+| `ZZKIMAGE_TRUSTED_DOWNLOAD_HOSTS` | 由基础地址推导 | 允许下载图片的受信任域名（逗号分隔），默认包含接口主机名及父域名子域。 |
 
 ## 返回内容
 
@@ -91,7 +91,7 @@ saved: /path/to/output/images/20260902-093806-771-gpt-image-2.png (1024x1024, 95
 
 ## 遇到问题
 
-- **缺少 API Key**：未设置 `PROIMAGE_API_KEY` 时服务端直接退出，请在客户端配置的 `env` 块中添加。
+- **缺少 API Key**：未设置 `ZZKIMAGE_API_KEY` 时服务端直接退出，请在客户端配置的 `env` 块中添加。
 - **鉴权失败 (401)**：API Key 无效、已过期或无中转站对应权限。
 - **客户端超时**：生成通常耗时 15–60 秒，服务端每 5 秒发送一次进度通知；若客户端超时断开，请调高客户端超时（如 Claude Code 设置 `MCP_TIMEOUT=300000`）。
 - **尺寸/比例被拒**：模型不支持请求的宽高比（比例超过 3:1 全局拦截），请依错误提示选用该模型支持的比例。
@@ -100,9 +100,9 @@ saved: /path/to/output/images/20260902-093806-771-gpt-image-2.png (1024x1024, 95
 ## 安全与限制
 
 - **传输安全**：仅允许 `https` 传输（非本机），防止 API Key 作为 Bearer token 明文泄露。
-- **沙箱隔离**：输出强制限制在 `PROIMAGE_SAVE_DIR_ROOT` 内，杜绝路径穿越。
+- **沙箱隔离**：输出强制限制在 `ZZKIMAGE_SAVE_DIR_ROOT` 内，杜绝路径穿越。
 - **输入校验**：参考图必须通过文件魔数校验（PNG/JPEG/WebP/GIF）且单文件不超过 25 MB。
-- **下载白名单**：图片下载链接仅限 `PROIMAGE_TRUSTED_DOWNLOAD_HOSTS` 允许的域名，防范 SSRF。
+- **下载白名单**：图片下载链接仅限 `ZZKIMAGE_TRUSTED_DOWNLOAD_HOSTS` 允许的域名，防范 SSRF。
 
 ## 开发
 
@@ -122,4 +122,4 @@ npm start       # 启动编译产物 node dist/index.js
 
 ## 许可证
 
-本项目遵循 [MIT 开源许可证](LICENSE)。如遇问题或建议欢迎提交 [GitHub Issues](https://github.com/DawnJson/Pro-Image-Mcp/issues)。
+本项目遵循 [MIT 开源许可证](LICENSE)。如遇问题或建议欢迎提交 [GitHub Issues](https://github.com/DawnJson/ZZK-Image-MCP/issues)。

@@ -6,16 +6,16 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 
 // Resolved from this file so the harness runs from any checkout location.
 const PROJ = dirname(fileURLToPath(import.meta.url));
-const OUT = process.env.PROIMAGE_SAVE_DIR?.trim() || join(tmpdir(), "pro-image-e2e");
+const OUT = process.env.ZZKIMAGE_SAVE_DIR?.trim() || join(tmpdir(), "zzk-image-e2e");
 
 const transport = new StdioClientTransport({
   command: process.execPath,
   args: [`${PROJ}/dist/index.js`],
   env: {
     ...process.env,
-    PROIMAGE_API_KEY: process.env.PROIMAGE_API_KEY,
-    PROIMAGE_SAVE_DIR: OUT,
-    PROIMAGE_DEFAULT_MODEL: "z-image",
+    ZZKIMAGE_API_KEY: process.env.ZZKIMAGE_API_KEY,
+    ZZKIMAGE_SAVE_DIR: OUT,
+    ZZKIMAGE_DEFAULT_MODEL: "z-image",
   },
   stderr: "inherit",
 });

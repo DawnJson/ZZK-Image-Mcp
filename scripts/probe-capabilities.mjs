@@ -120,7 +120,7 @@ if (!rawSeedUrl) {
 // Trims the leading space the relay emits and refuses untrusted hosts.
 const seedUrl = assertDownloadable(rawSeedUrl, cfg);
 const refBytes = Buffer.from(await (await fetch(seedUrl)).arrayBuffer());
-const refPath = join(tmpdir(), "pro-image-probe-ref.png");
+const refPath = join(tmpdir(), "zzk-image-probe-ref.png");
 await writeFile(refPath, refBytes);
 console.log(`Reference saved to ${refPath} (${(refBytes.length / 1024).toFixed(0)}KB)\n`);
 

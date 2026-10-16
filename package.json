@@ -1,17 +1,17 @@
 {
-  "name": "pro-image-mcp",
-  "version": "0.1.4",
+  "name": "zzk-image-mcp",
+  "version": "0.2.0",
   "description": "MCP server for OpenAI-compatible image relay stations (New API / one-api): required quality+size, per-family parameters, and measured per-call cost",
   "type": "module",
   "license": "MIT",
   "author": "DawnJson",
-  "homepage": "https://github.com/DawnJson/Pro-Image-Mcp#readme",
+  "homepage": "https://github.com/DawnJson/ZZK-Image-MCP#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DawnJson/Pro-Image-Mcp.git"
+    "url": "git+https://github.com/DawnJson/ZZK-Image-MCP.git"
   },
   "bugs": {
-    "url": "https://github.com/DawnJson/Pro-Image-Mcp/issues"
+    "url": "https://github.com/DawnJson/ZZK-Image-MCP/issues"
   },
   "keywords": [
     "mcp",
@@ -25,7 +25,7 @@
     "claude-code"
   ],
   "bin": {
-    "pro-image-mcp": "dist/index.js"
+    "zzk-image-mcp": "dist/index.js"
   },
   "main": "dist/index.js",
   "files": [
