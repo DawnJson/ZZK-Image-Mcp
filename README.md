@@ -46,7 +46,7 @@ npm install -g zzk-image-mcp     # 全局安装；或用 npx -y zzk-image-mcp
       "args": ["-y", "zzk-image-mcp"],
       "env": {
         "ZZKIMAGE_API_KEY": "sk-[REDACTED]",
-        "ZZKIMAGE_BASE_URL": "https://api.zaizaiking.com",
+        "ZZKIMAGE_BASE_URL": "https://www.zaizaiking.com",
         "ZZKIMAGE_SAVE_DIR": "/path/to/output/images",
         "ZZKIMAGE_DEFAULT_MODEL": "gpt-image-2"
       }
@@ -63,7 +63,7 @@ Windows 下直接 spawn 进程的客户端（如 Codex）对裸 `zzk-image-mcp` 
 | 变量名 | 默认值 | 说明 |
 |---|---|---|
 | `ZZKIMAGE_API_KEY` | *(无)* | **必填**。中转站 API Key，未设置则服务报错退出。 |
-| `ZZKIMAGE_BASE_URL` | `https://api.zaizaiking.com` | 中转站接口地址。仅支持 `https`（`localhost`/`127.0.0.1` 允许 `http`）。 |
+| `ZZKIMAGE_BASE_URL` | `https://www.zaizaiking.com` | 中转站接口地址。仅支持 `https`（`localhost`/`127.0.0.1` 允许 `http`）。 |
 | `ZZKIMAGE_SAVE_DIR` | `~/Pictures/zzk-image-mcp` | 图片本地保存目录。 |
 | `ZZKIMAGE_DEFAULT_MODEL` | `gpt-image-2` | 省略 `model` 参数时的默认模型。 |
 | `ZZKIMAGE_TIMEOUT_MS` | `300000` | HTTP 请求超时毫秒数（默认 5 分钟）。 |

@@ -88,7 +88,7 @@ export function loadConfig(): Config {
     );
   }
   // Trailing slashes break path joining against the /v1 prefix.
-  const baseUrl = (process.env.ZZKIMAGE_BASE_URL?.trim() || "https://api.zaizaiking.com").replace(/\/+$/, "");
+  const baseUrl = (process.env.ZZKIMAGE_BASE_URL?.trim() || "https://www.zaizaiking.com").replace(/\/+$/, "");
   assertTransportSecurity(baseUrl);
 
   const saveDir = envDir("ZZKIMAGE_SAVE_DIR") ?? join(homedir(), "Pictures", "zzk-image-mcp");

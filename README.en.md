@@ -48,7 +48,7 @@ To pin an exact version, query `npm view zzk-image-mcp version` and specify `zzk
       "args": ["-y", "zzk-image-mcp"],
       "env": {
         "ZZKIMAGE_API_KEY": "sk-[REDACTED]",
-        "ZZKIMAGE_BASE_URL": "https://api.zaizaiking.com",
+        "ZZKIMAGE_BASE_URL": "https://www.zaizaiking.com",
         "ZZKIMAGE_SAVE_DIR": "/path/to/output/images",
         "ZZKIMAGE_DEFAULT_MODEL": "gpt-image-2"
       }
@@ -67,7 +67,7 @@ Example prompt:
 | Variable | Default | Description |
 |---|---|---|
 | `ZZKIMAGE_API_KEY` | *(none)* | **Required**. Relay API key. Missing key exits immediately. |
-| `ZZKIMAGE_BASE_URL` | `https://api.zaizaiking.com` | Relay base URL. Must be `https` (`http` only for localhost). |
+| `ZZKIMAGE_BASE_URL` | `https://www.zaizaiking.com` | Relay base URL. Must be `https` (`http` only for localhost). |
 | `ZZKIMAGE_SAVE_DIR` | `~/Pictures/zzk-image-mcp` | Directory where downloaded images are saved. |
 | `ZZKIMAGE_DEFAULT_MODEL` | `gpt-image-2` | Fallback model when `model` argument is omitted. |
 | `ZZKIMAGE_TIMEOUT_MS` | `300000` | Single HTTP request timeout in ms (5 minutes). |
